@@ -14270,7 +14270,23 @@ Look at the graph at the bottom left from the cell above(the visualization creat
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
-<p>AdaBoost classifier combines multiple weak classifier algorithms, that result in poor prediction if run alone, to produce a better model. The algorithm iteratively trains multiple weak classifier algorithms based on a subset of the data. It places a higher weight on wrongly labeled data so that it will be trained on the next iterations until it gets trained well. It also assigns weight on each classifier such that high accuracy classifier will get a higher weight. In the end, higher weighted classifiers will have a greater impact on the final model.</p>
+<p>AdaBoost classifier combines multiple weak classifier algorithms to produce a better model. Weak classifiers are algorithms that when used for predictions, the outcome is almost like flipping a coin. That means the probability of getting the right prediction is a little above 50%. An example of a weak classifier is when it is used to classify a person as male or female based on hand's length. They will classify people wrongly but will have an accuracy that is slightly better than 50%. The AdaBoost algorithm iteratively trains multiple weak classifier algorithms based on a subset of the data. It places a higher weight on wrongly labeled data so that it will be trained on the next iterations until it gets trained well. It also assigns weight on each classifier such that high accuracy classifier will get a higher weight. In the end, higher weighted classifiers will have a greater impact on the final model. The following is a listing of how AdaBoost algorithm train and predict:</p>
+<p>1- Assign an equal weight to all the training data</p>
+<p>2- a random training set and train a weak model</p>
+<p>3- Update the weight on the data set based on the following:</p>
+
+<pre><code>3.1- If the prediction is correct, decrease weight
+
+3.2- If the prediction is incorrect, increase data
+
+</code></pre>
+<p>4- Assign a weight on the weak algorithm based on the accuracy of the prediction</p>
+<p>5- Pick another weak algorithm and train it on another random data but place a high priority on data sets with higher weight</p>
+<p>6- Repeat steps 3, 4, and 5 until all data predicted perfectly or there is no more room for improvement</p>
+<p>7- To make a prediction with the final AdaBoost model, calculate the weighted average of all the weak algorithms. If the average is positive, the output is the first class. If the average is negative, the output is the second class.</p>
+<p>Reference:</p>
+<p>-<a href="https://machinelearningmastery.com/boosting-and-adaboost-for-machine-learning/">https://machinelearningmastery.com/boosting-and-adaboost-for-machine-learning/</a></p>
+<p>-<a href="http://mccormickml.com/2013/12/13/adaboost-tutorial/">http://mccormickml.com/2013/12/13/adaboost-tutorial/</a></p>
 
 </div>
 </div>
