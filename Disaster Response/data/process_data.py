@@ -4,6 +4,17 @@ from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
+    """
+    The function to load data from a cvs file 
+  
+    Parameters: 
+        messages_filepath: The data cvs file that contains the messages to be analyzed.
+        categories_filepath: The categories file path that will be used to include with the messages.        
+
+    Returns:
+        df: Dataframe that contains the messages and the corresponding categories 
+    """
+
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories,on='id')
@@ -11,6 +22,17 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """
+    The function to clean the dataframe. The cleaning include renaming categories,
+        and converting their values from string to number, and dropping dupicates and nulls.
+  
+    Parameters: 
+        df: The dataframe to be cleaned that contains the messages.
+
+    Returns:
+        df: Dataframe after the cleaning 
+    """
+
     categories = df.categories.str.split(';',expand=True)
     row = categories.iloc[0]
     category_colnames = row.apply(lambda c: c.strip('-01'))
@@ -30,6 +52,14 @@ def clean_data(df):
     return df
 
 def save_data(df, database_filename):
+    """
+    The function to create database file from the dataframe.
+  
+    Parameters: 
+        df: The dataframe to be saved to SQL format.
+        database_filename: The name of the database file
+
+    """
     engine = create_engine('sqlite:///'+database_filename)
     df.to_sql('messageCategory', engine, index=False, if_exists='replace')  
 

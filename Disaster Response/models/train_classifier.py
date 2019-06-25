@@ -20,6 +20,19 @@ import pickle
 
 
 def load_data(database_filepath):
+    """
+    The function to load data from a database file 
+  
+    Parameters: 
+        database_filepath: The database file that contains the messages to be analyzed.
+
+    Returns:
+        X: Dataframe that contains the messages (Featuers) 
+        Y: Dataframe that contains the categories (Targets)
+        Y.columns.values: List of categories names 
+
+    """
+
     engine = create_engine('sqlite:///'+database_filepath)
     df = pd.read_sql('SELECT * FROM messageCategory', engine)
     X = df['message']
@@ -28,6 +41,17 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    """
+    The function to tokenize, lemmatize and stem text string 
+  
+    Parameters: 
+        text: The string that needs to be processed.
+
+    Returns:
+        clean_words: The tokenized, lemmatized and stemmed text
+
+    """
+
     text = text.lower()
     text = re.sub(r"[^a-zA-Z0-9]", " ", text) 
     text = text.strip()
@@ -38,6 +62,14 @@ def tokenize(text):
 
 
 def build_model():
+    """
+    The function to build model based on GridSearchCV
+
+    Returns:
+        model: The GridSearchCV with the optimal parameters
+
+    """
+
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer = tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -54,6 +86,17 @@ def build_model():
 
 
 def evaluate_model(model, X_test, y_test, category_names):
+    """
+    The function to report the precision, recall and f1 score on test set 
+  
+    Parameters: 
+        model: The model that already fitted and used for prediction.
+        X_test: Test features
+        y_test: Test target
+        category_names: list of categories
+
+    """
+
     y_prediction = model.predict(X_test)
     y_prediction_df = pd.DataFrame(y_prediction, columns=y_test.columns)
     for column in category_names:
@@ -61,6 +104,14 @@ def evaluate_model(model, X_test, y_test, category_names):
         print(classification_report(y_test[column],y_prediction_df[column]))
 
 def save_model(model, model_filepath):
+    """
+    The function to pack a model
+  
+    Parameters: 
+        model: The model that needs to be packed
+        model_filepath: The file name/path for the packed model
+
+    """
     pickle.dump(model, open(model_filepath,'wb'))
 
 
